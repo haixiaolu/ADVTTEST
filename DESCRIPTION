@@ -4,8 +4,18 @@ Title: Testing NULL Hypothesis Using t.test
 Version: 0.1.0
 Author: Haixiao Lu
 Maintainer: Haixiao Lu <hx.lu@ou.edu>
-Description: This package's main goal is using S3 OOP approach to test the NULL hypothesis based on t.test theory in R
-License: MIT
+Description: This package's main goal is using S3 OOP approach to test the NULL 
+    hypothesis based on t.test theory in R.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
+Imports: 
+    ggplot2,
+    shiny
+URL: https://github.com/haixiaolu/ADVTTEST
+BugReports: https://github.com/haixiaolu/ADVTTEST/issues
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

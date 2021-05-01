@@ -2,32 +2,38 @@
 % Please edit documentation in R/myttest.R
 \name{myttest}
 \alias{myttest}
-\title{myttest function}
+\title{A constructor function for t tests}
 \usage{
-myttest(x, y, alpha, paired = FALSE)
+myttest(x, y, alpha = 0.05, paired = FALSE)
 }
 \arguments{
-\item{x}{numeric x value}
+\item{x}{vector of data}
 
-\item{y}{numeric y value}
+\item{y}{vector of data}
 
-\item{alpha}{numeric alpha value}
+\item{alpha}{numeric alpha level between 0, 1}
 
-\item{paired}{logical value for paired parameter, TRUE or FALSE}
+\item{paired}{logical value for paired parameter, TRUE or FALSE, default by FALSE}
 }
 \value{
-a list of different t.test type, p value
-and boxplots for different test type
+a list containing the data, and t test object
 }
 \description{
 Test the NULL hypothesis using t.test theory and make some boxplots
 }
+\details{
+The constructor function using t.test theory to test the NULL hypothesis
+and make a list that can be worked and further processed with an appropriate method(s)
+}
 \examples{
 
-set.seed(32); x=rnorm(30,mean=10,sd=15)
-set.seed(35); y=rnorm(30,mean=8,sd=15)
-ans1=myttest(x,y,alpha=0.05,paired=FALSE)
-print(ans1)
-class(ans1)
-plot(ans1)
+myttest(x=rnorm(30,mean=10,sd=15), y=rnorm(30,mean=8,sd=15))
 }
+\seealso{
+\code{\link{t.test}} for more information about t tests
+}
+\keyword{NHST}
+\keyword{student's}
+\keyword{t.test}
+\keyword{testing}
+\keyword{ttest,}

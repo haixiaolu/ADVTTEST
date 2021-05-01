@@ -1,7 +1,7 @@
 ---
 title: "ADVTTEST Package"
 author: "Haixiao Lu"
-date: "`r Sys.time()`"
+date: "2021-04-30 23:54:28"
 output:
   rmarkdown::html_vignette
 vignette: >
@@ -10,14 +10,10 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
 
-```{r setup}
+
+
+```r
 library(ADVTTEST)
 library(ggplot2)
 ```
@@ -37,7 +33,8 @@ The first function is called `myttest` and it uses several t.test type to test t
 and it produces a list of useful information to be processed by method functions, such as `p.value`,
 `Confindence Interval`, `method`, etc.
 
-```{r}
+
+```r
 myttest <- function(x, y, alpha = 0.05, paired = FALSE)
 {
     data <- vector(mode = "numeric", length = length(x) + length(y))
@@ -70,17 +67,18 @@ myttest <- function(x, y, alpha = 0.05, paired = FALSE)
     class(obj) = "Rttest"
     obj
 }
-
 ```
 
 
 ### Check out the output class
 
-```{r}
+
+```r
 set.seed(32); x=rnorm(30,mean=10,sd=15)
 set.seed(35); y=rnorm(30,mean=8,sd=15)
 ans1=myttest(x,y,alpha=0.05,paired=FALSE)
 class(ans1)
+#> [1] "Rttest"
 ```
 
 You can see the output is of class `Rttest`
@@ -88,8 +86,10 @@ You can see the output is of class `Rttest`
 
 The function returns a list of components. The components then be operated on by an appropriate 
 method attached to a generic. If you want to check the output components, try follow `code`
-```{r}
+
+```r
 names(ans1)
+#> [1] "ttest"  "df"     "paired"
 ```
 
 
@@ -100,7 +100,8 @@ names(ans1)
 The `print` method is attached to the generic function `print()`. This method simply print out the 
 statistic summary information from the output components. 
 
-```{r}
+
+```r
 print.Rttest <- function(x){
     # print out the p value
     `p.value` = x[['ttest']][['p.value']]
@@ -116,13 +117,38 @@ print.Rttest <- function(x){
          "Y/N", `Y/N`,
          "test_type:",`method`)
 }
-
 ```
 
 
 We can call it by simply invoking the `print()` function
-```{r}
+
+```r
 print(ans1)
+#> [[1]]
+#> [1] "p_value:"
+#> 
+#> [[2]]
+#> [1] 0.8249868
+#> 
+#> [[3]]
+#> [1] "CI:"
+#> 
+#> [[4]]
+#> [1] -7.623130  6.100201
+#> attr(,"conf.level")
+#> [1] 0.95
+#> 
+#> [[5]]
+#> [1] "Y/N"
+#> 
+#> [[6]]
+#> [1] "NO, not reject NULL"
+#> 
+#> [[7]]
+#> [1] "test_type:"
+#> 
+#> [[8]]
+#> [1] " Two Sample t-test"
 ```
 
 ### Plot method
@@ -130,7 +156,8 @@ print(ans1)
 The `plot` method is attached to the generic function `plot()`. This method is plotting the 
 output components that we defined in the `plot.Rttest()` function. 
 
-```{r}
+
+```r
 plot.Rttest <- function(x)
 {
             df = x$df
@@ -174,7 +201,8 @@ plot.Rttest <- function(x)
 
 
 We can call it by simply invoking the `plot()` function
-```{r}
+
+```r
 plot(ans1)
 ```
 
@@ -190,7 +218,8 @@ There are three basic parts in the Shiny app.
 
 
 ## part 1  `ui`
-```{r, eval=FALSE}
+
+```r
 # Define UI for application that draws a histogram
 ui <- fluidPage(
 
@@ -204,8 +233,6 @@ ui <- fluidPage(
                               label = strong("Show Summary Stats"),
                               value = TRUE)
             ),
-
-
 
         # Show a plot of the generated distribution
             mainPanel(
@@ -236,7 +263,8 @@ For this section in this particular app,
 
 ## part 2 `server`
 
-```{r, eval = FALSE}
+
+```r
 # Define server logic required to draw a histogram
 server <- function(input, output) {
 
@@ -280,7 +308,6 @@ server <- function(input, output) {
             p + theme(plot.title = element_text(color = 'blue',
                                                 size = 20,
                                                 face='bold'))
-
 
         # option for input 3
         }else if((input$xcol == 'x') && (input$ycol == 'y2')){
@@ -375,7 +402,6 @@ server <- function(input, output) {
         }
         }
         
-
 
     })
     output$summary <- renderPrint({
@@ -475,7 +501,8 @@ Here's the process of the `server`:
 
 Then the third part of the app is that we place both 
 `ui` and `server` functions into the `shinyApp()` function
-```{r, eval = FALSE}
+
+```r
 # Run the application
 shinyApp(ui = ui, server = server)
 ```
@@ -485,7 +512,8 @@ shinyApp(ui = ui, server = server)
 
 We put `ui` and `server` into a shiny app and can be invoked using:
 
-```{r}
+
+```r
 shinyboxplot<-function(){
     shiny::runApp(("myTtest"),launch.browser = TRUE)
 }
@@ -495,30 +523,108 @@ shinyboxplot<-function(){
 # Demonstration the package
 
 ## Sample 1
-```{r}
+
+```r
 set.seed(32); x=rnorm(30,mean=10,sd=15)
 set.seed(35); y=rnorm(30,mean=8,sd=15)
 ans1=ADVTTEST::myttest(x,y,alpha=0.05,paired=FALSE)
 print(ans1)
+#> [[1]]
+#> [1] "p_value:"
+#> 
+#> [[2]]
+#> [1] 0.8249868
+#> 
+#> [[3]]
+#> [1] "CI:"
+#> 
+#> [[4]]
+#> [1] -7.623130  6.100201
+#> attr(,"conf.level")
+#> [1] 0.95
+#> 
+#> [[5]]
+#> [1] "Y/N"
+#> 
+#> [[6]]
+#> [1] "NO, not reject NULL"
+#> 
+#> [[7]]
+#> [1] "test_type:"
+#> 
+#> [[8]]
+#> [1] " Two Sample t-test"
 plot(ans1)
 ```
 
 
 ## Sample 2
-```{r}
+
+```r
 set.seed(32); x=rnorm(30,mean=10,sd=5)
 set.seed(35); y=rnorm(30,mean=8,sd=15)
 ans2=ADVTTEST::myttest(x,y,alpha=0.05,paired=FALSE)
 print(ans2)
+#> [[1]]
+#> [1] "p_value:"
+#> 
+#> [[2]]
+#> [1] 0.340561
+#> 
+#> [[3]]
+#> [1] "CI:"
+#> 
+#> [[4]]
+#> [1] -8.672098  3.086584
+#> attr(,"conf.level")
+#> [1] 0.95
+#> 
+#> [[5]]
+#> [1] "Y/N"
+#> 
+#> [[6]]
+#> [1] "NO, not reject NULL"
+#> 
+#> [[7]]
+#> [1] "test_type:"
+#> 
+#> [[8]]
+#> [1] "Welch Two Sample t-test"
 ```
 
 
 ## Sample 3
-```{r}
+
+```r
 set.seed(32); x=rnorm(30,mean=10,sd=15)
 set.seed(35); y = x+ rnorm(30, 5 ,4)
 ans3=ADVTTEST::myttest(x,y,alpha=0.05,paired=TRUE)
 print(ans3)
+#> [[1]]
+#> [1] "p_value:"
+#> 
+#> [[2]]
+#> [1] 1.29572e-09
+#> 
+#> [[3]]
+#> [1] "CI:"
+#> 
+#> [[4]]
+#> [1] -8.082480 -5.015335
+#> attr(,"conf.level")
+#> [1] 0.95
+#> 
+#> [[5]]
+#> [1] "Y/N"
+#> 
+#> [[6]]
+#> [1] "Yes, reject NULL"
+#> 
+#> [[7]]
+#> [1] "test_type:"
+#> 
+#> [[8]]
+#> [1] "Paired t-test"
 plot(ans3)
 ```
 

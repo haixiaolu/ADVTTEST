@@ -24,6 +24,7 @@
 myttest <- function(x, y, alpha, paired = FALSE)
 {
     # Check if it's paired value
+    # if paried == TRUE, the use t.test when paried = TRUE
     if(paired != FALSE){
         res = t.test(y, x, paired = TRUE)
     }else{
@@ -31,39 +32,46 @@ myttest <- function(x, y, alpha, paired = FALSE)
         p = v$p.value
         # # t test
         # if p value is greater than significance level alpha 0.05,
-        # no significant difference between the variances of the two sets
+        # use th var.equal = True to test 'Two sample t-test'
         if(p >= alpha){
             res = t.test(y, x, var.equal = TRUE)
         }else{
             res = t.test(y, x, var.equal = FALSE)
         }
     }
+    # return a list and assign it to an objective
     obj = list(data = list(x = x, y = y, res = res))
-    class(obj) = "myTest"
+    # the constructor class is called "myTest'
+    class(obj) = "Rttest"
     obj
 
 }
 
 
 # print method
-print.myTest <- function(x){
+print.Rttest <- function(x){
+    # print out the p value
     `p.value` = x[['data']][['res']][['p.value']]
+    # output interval
     `confidence Interval` = x[['data']][['res']][["conf.int"]]
+    # output t.test type
     `method` = x[['data']][['res']][['method']]
+    `Y/N`  = ifelse(x[['data']][['res']][['p.value']] <= 0.05, "Yes, reject NULL", "NO, not reject NULL")
+    # return a list of p value, interval and test type
     list("p_value:", `p.value`,
          "CI:",
          `confidence Interval`,
+         "Y/N", `Y/N`,
          "test_type:",`method`)
 }
 
 
-plot.myTest <- function(x)
+plot.Rttest <- function(x)
 {
-
-
-
+            # data of x and y
             x1 = x[['data']][['x']]
             y = x[['data']][['y']]
+            # the difference between x and y
             x2 = y - x1
             # boxplot
             # population
@@ -75,20 +83,24 @@ plot.myTest <- function(x)
 
             #if(!require(ggplot2)) install.packages("ggplot2")
             library(ggplot2)
+            # if test type is "To Sample t-text' make a boxplot
             if(x[['data']][['res']][['method']] == ' Two Sample t-test'){
-                g = ggplot(df, aes(x = pop,
+                g = ggplot(df, aes(x1 = pop,
                                    y = samples,
                                    fill = pop)) +
                     geom_boxplot()
                 print(g)
+            # if test type is 'Welch Two Sample t-test' make a different boxplot
             }else if(x[['data']][['res']][['method']] == 'Welch Two Sample t-test'){
-                g = ggplot(df, aes(x = pop,
+                g = ggplot(df, aes(x1 = pop,
                                    y = samples,
                                    fill = pop)) +
                     geom_boxplot()
                 print(g)
-
+            # make a paired boxplot of difference between x and y
             }else{
+                    # g = ggplot(data = df, aes(x = x2, y = samples)) +
+                    #     geom_boxplot()
                     g = boxplot(x2,
                                 col = "skyblue",
                                 main = "Difference between x and y",

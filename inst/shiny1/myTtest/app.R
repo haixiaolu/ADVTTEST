@@ -30,7 +30,7 @@ ui <- fluidPage(
 
     # Application title
         titlePanel("Testing the NULL Hypothesis"),
-        sidebarLayout(
+        sidebarLayout(position = "right",
             sidebarPanel(
                 selectInput('xcol', 'X variable', c('x', 'x1', 'x2')),
                 selectInput('ycol', 'Y variable', c("y", "y1", "y2")),
@@ -52,7 +52,10 @@ ui <- fluidPage(
             )
     )
  )
-# Define server logic required to draw a histogram
+
+
+# Define server logic required to draw a boxplot
+
 server <- function(input, output) {
 
     selectedData <- reactive({
@@ -65,126 +68,132 @@ server <- function(input, output) {
         # make a data frame
         df1 = data.frame(pop = pop,
                         samples = c(df$x, df$y))
-        # option for input 1
-        if ((input$xcol == 'x') && (input$ycol == 'y')){
-            p = ggplot(df1, aes(x=pop,
-                                y = samples,
-                                fill = pop)) +
-                        geom_boxplot() +
-                        ggtitle("Boxplot for x and y")
+        if(!requireNamespace("ggplot2", quietly = TRUE)){
+            stop("Package \"ggplot2\" needed for this function to work. Please install it.",
+                 call. = FALSE)
+            # option for input 1
+            if ((input$xcol == 'x') && (input$ycol == 'y')){
+                p = ggplot(df1, aes(x=pop,
+                                    y = samples,
+                                    fill = pop)) +
+                    geom_boxplot() +
+                    ggtitle("Boxplot for x and y")
 
-            # add stype to the title
-            p + theme(plot.title = element_text(color = '#993333',
-                                                size = 20,
-                                                face='bold'))
+                # add stype to the title
+                p + theme(plot.title = element_text(color = '#993333',
+                                                    size = 20,
+                                                    face='bold'))
 
-        # option for input 2
-        }else if((input$xcol == 'x') && (input$ycol == 'y1')){
-            pop = rep(c("x", "y1"), c(length(df$x), length(df$y1)))
-            df3 = data.frame(pop = pop,
-                             samples = c(df$x, df$y1))
+                # option for input 2
+            }else if((input$xcol == 'x') && (input$ycol == 'y1')){
+                pop = rep(c("x", "y1"), c(length(df$x), length(df$y1)))
+                df3 = data.frame(pop = pop,
+                                 samples = c(df$x, df$y1))
 
-            p = ggplot(df3,aes(x = pop,
-                               y = samples,
-                               fill = pop)) +
-                geom_boxplot() +
-                ggtitle("Boxplot for x and y1")
-            p + theme(plot.title = element_text(color = 'blue',
-                                                size = 20,
-                                                face='bold'))
+                p = ggplot(df3,aes(x = pop,
+                                   y = samples,
+                                   fill = pop)) +
+                    geom_boxplot() +
+                    ggtitle("Boxplot for x and y1")
+                p + theme(plot.title = element_text(color = 'blue',
+                                                    size = 20,
+                                                    face='bold'))
 
 
-        # option for input 3
-        }else if((input$xcol == 'x') && (input$ycol == 'y2')){
-               `Difference of X` = df$y2 - df$x
+                # option for input 3
+            }else if((input$xcol == 'x') && (input$ycol == 'y2')){
+                `Difference of X` = df$y2 - df$x
                 boxplot(`Difference of X`,
                         col = "#377EB8",
                         main = "Difference between x and y",
                         xlab = "Difference x",
                         ylab = "sample")
 
-        # option for input 4
-        }else if((input$xcol == 'x1') && (input$ycol == 'y')){
+                # option for input 4
+            }else if((input$xcol == 'x1') && (input$ycol == 'y')){
                 pop = rep(c("x1", "y"), c(length(df$x1), length(df$y)))
                 df4 = data.frame(pop = pop,
-                                samples = c(df$x1, df$y))
+                                 samples = c(df$x1, df$y))
                 p = ggplot(df4,aes(x = pop,
                                    y = samples,
                                    fill = pop)) +
-                                geom_boxplot() +
-                                ggtitle("Boxplot for x1 and y")
+                    geom_boxplot() +
+                    ggtitle("Boxplot for x1 and y")
 
                 p + theme(plot.title = element_text(color = 'red',
                                                     size = 20,
                                                     face='bold'))
 
-        # option for input 5
-        }else if((input$xcol == 'x1') && (input$ycol == 'y1')){
-            pop = rep(c("x1", 'y1'), c(length(df$x1), length(df$y1)))
-            # make a data frame for input 2
-            df2 = data.frame(pop = pop,
-                             samples = c(df$x1, df$y1))
+                # option for input 5
+            }else if((input$xcol == 'x1') && (input$ycol == 'y1')){
+                pop = rep(c("x1", 'y1'), c(length(df$x1), length(df$y1)))
+                # make a data frame for input 2
+                df2 = data.frame(pop = pop,
+                                 samples = c(df$x1, df$y1))
 
-            p = ggplot(df2,aes(x = pop,
-                               y = samples,
-                               fill = pop)) +
-                        geom_boxplot() +
-                        ggtitle("Boxplot for x1 and y1")
+                p = ggplot(df2,aes(x = pop,
+                                   y = samples,
+                                   fill = pop)) +
+                    geom_boxplot() +
+                    ggtitle("Boxplot for x1 and y1")
 
-            # add style to the title
-            p + theme(plot.title = element_text(color = 'blue',
-                                                size = 20,
-                                                face='bold'))
-        # option for input 6
-        }else if((input$xcol == "x1") && (input$ycol == "y2")){
-            `Difference of X1` = df$y2 - df$x1
-             boxplot(`Difference of X1`,
-                     col = "#4DAF4A",
-                     main = "Difference between x1 and y",
-                     xlab = "Difference x",
-                     ylab = "sample")
+                # add style to the title
+                p + theme(plot.title = element_text(color = 'blue',
+                                                    size = 20,
+                                                    face='bold'))
+                # option for input 6
+            }else if((input$xcol == "x1") && (input$ycol == "y2")){
+                `Difference of X1` = df$y2 - df$x1
+                boxplot(`Difference of X1`,
+                        col = "#4DAF4A",
+                        main = "Difference between x1 and y",
+                        xlab = "Difference x",
+                        ylab = "sample")
 
-        # option for input 7
-        }else if((input$xcol == "x2") && (input$ycol == "y")){
-            pop = rep(c("x2", "y"), c(length(df$x2), length(df$y)))
-            df5 = data.frame(pop = pop,
-                             samples = c(df$x2, df$y))
+                # option for input 7
+            }else if((input$xcol == "x2") && (input$ycol == "y")){
+                pop = rep(c("x2", "y"), c(length(df$x2), length(df$y)))
+                df5 = data.frame(pop = pop,
+                                 samples = c(df$x2, df$y))
 
-            p = ggplot(df5,aes(x = pop,
-                               y = samples,
-                               fill = pop)) +
-                     geom_boxplot() +
-                     ggtitle("Boxplot for x2 and y")
+                p = ggplot(df5,aes(x = pop,
+                                   y = samples,
+                                   fill = pop)) +
+                    geom_boxplot() +
+                    ggtitle("Boxplot for x2 and y")
 
-            p + theme(plot.title = element_text(color = '#984EA3',
-                                                size = 20,
-                                                face='bold.italic'))
+                p + theme(plot.title = element_text(color = '#984EA3',
+                                                    size = 20,
+                                                    face='bold.italic'))
 
-         # option for input 8
-        }else if((input$xcol == "x2") && (input$ycol == "y1")){
-            pop = rep(c("x2", "y1"), c(length(df$x2), length(df$y1)))
-            df5 = data.frame(pop = pop,
-                             samples = c(df$x2, df$y1))
+                # option for input 8
+            }else if((input$xcol == "x2") && (input$ycol == "y1")){
+                pop = rep(c("x2", "y1"), c(length(df$x2), length(df$y1)))
+                df5 = data.frame(pop = pop,
+                                 samples = c(df$x2, df$y1))
 
-            p = ggplot(df5,aes(x = pop,
-                               y = samples,
-                               fill = pop)) +
-                        geom_boxplot() +
-                        ggtitle("Boxplot for x2 and y1")
+                p = ggplot(df5,aes(x = pop,
+                                   y = samples,
+                                   fill = pop)) +
+                    geom_boxplot() +
+                    ggtitle("Boxplot for x2 and y1")
 
-            p + theme(plot.title = element_text(color = 'skyblue',
-                                                size = 20,
-                                                face='bold.italic'))
+                p + theme(plot.title = element_text(color = 'skyblue',
+                                                    size = 20,
+                                                    face='bold.italic'))
 
-         # option for input 9
-        }else{
-            `Difference of X2` = df$y2 - df$x2
-             boxplot(`Difference of X2`,
-                     col = "#FF7F00",
-                     main = "Difference between x2 and y",
-                     xlab = "Difference x",
-                     ylab = "sample")
+                # option for input 9
+            }else{
+                `Difference of X2` = df$y2 - df$x2
+                boxplot(`Difference of X2`,
+                        col = "#FF7F00",
+                        main = "Difference between x2 and y",
+                        xlab = "Difference x",
+                        ylab = "sample")
+            }
+
         }
+
 
 
     })
