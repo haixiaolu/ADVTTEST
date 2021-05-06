@@ -13,5 +13,8 @@
 #' @examples
 #' \dontrun{shinyboxplot()}
 shinyboxplot<-function(){
-    shiny::runApp(system.file("inst/shiny1/myTtest", package = "ADVTTEST"),launch.browser = TRUE)
+    shiny::runApp(system.file("shiny1/myTtest", package = "ADVTTEST"),launch.browser = TRUE)
+
 }
+
+

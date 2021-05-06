@@ -485,9 +485,9 @@ shinyApp(ui = ui, server = server)
 
 We put `ui` and `server` into a shiny app and can be invoked using:
 
-```{r}
+```{r, eval=FALSE}
 shinyboxplot<-function(){
-    shiny::runApp(("myTtest"),launch.browser = TRUE)
+    shiny::runApp(system.file("inst/shiny1/myTtest", package = "ADVTTEST"),launch.browser = TRUE)
 }
 ```
 

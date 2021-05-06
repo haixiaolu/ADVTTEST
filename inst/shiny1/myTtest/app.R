@@ -68,9 +68,6 @@ server <- function(input, output) {
         # make a data frame
         df1 = data.frame(pop = pop,
                         samples = c(df$x, df$y))
-        if(!requireNamespace("ggplot2", quietly = TRUE)){
-            stop("Package \"ggplot2\" needed for this function to work. Please install it.",
-                 call. = FALSE)
             # option for input 1
             if ((input$xcol == 'x') && (input$ycol == 'y')){
                 p = ggplot(df1, aes(x=pop,
@@ -191,8 +188,6 @@ server <- function(input, output) {
                         xlab = "Difference x",
                         ylab = "sample")
             }
-
-        }
 
 
 

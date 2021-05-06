@@ -1,7 +1,7 @@
 ---
 title: "ADVTTEST Package"
 author: "Haixiao Lu"
-date: "2021-04-30 23:54:28"
+date: "2021-05-03 21:58:25"
 output:
   rmarkdown::html_vignette
 vignette: >
@@ -515,7 +515,7 @@ We put `ui` and `server` into a shiny app and can be invoked using:
 
 ```r
 shinyboxplot<-function(){
-    shiny::runApp(("myTtest"),launch.browser = TRUE)
+    shiny::runApp(system.file("inst/shiny1/myTtest", package = "ADVTTEST"),launch.browser = TRUE)
 }
 ```
 

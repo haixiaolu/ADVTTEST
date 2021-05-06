@@ -26,9 +26,9 @@ plot.Rttest <- function(x,...)
 {
     df = x$df
     pop = x[["df"]][["pop"]]
-    if(!requireNamespace("ggplot2", quietly = TRUE)){
-        stop("Package \"ggplot2\" needed for this function to work. Please install it.",
-             call. = FALSE)
+    #if(!requireNamespace("ggplot2", quietly = TRUE)){
+        #stop("Package \"ggplot2\" needed for this function to work. Please install it.",
+             #call. = FALSE)
         #if test type is "To Sample t-text' make a boxplot
         if(x[['ttest']][['method']] == ' Two Sample t-test'){
             g <- ggplot(df, aes(x = pop, y = data)) +
@@ -57,6 +57,10 @@ plot.Rttest <- function(x,...)
             print(g)
         }
 
-    }
+     }
 
-}
+
+
+
+
+
